@@ -6,14 +6,12 @@ Apart script voor de reciever om te decoden. Stappen zijn:
 4. Decrypt encrypted data
 """
 
-from pyasn1.codec.der import encoder, decoder
+from pyasn1.codec.der import decoder
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.serialization import load_der_public_key, load_pem_private_key
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.concatkdf import ConcatKDFHash
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM
-from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
-import sys
 import os
 
 # ASN.1 classes van encode.py hergebruiken

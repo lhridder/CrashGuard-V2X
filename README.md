@@ -3,9 +3,9 @@
 - IEEE 1609.2  
 - PKI  
 
-with **Python** and **C**  
+...with **Python** and **C**  
 
-# Python Demo  
+# Python Demo - WAVE encoding
 1. V2X payload  
 2. Hashing  
 3. Signing  
@@ -15,3 +15,9 @@ with **Python** and **C**
 7. (Optioneel) encryption  
 8. EncryptedData  
 9. Ieee1609Dot2Data  
+
+# Python Demo - WAVE decoding  
+1. Ontvang bericht  
+2. Decode Ieee1609Dot2Data  
+3. Decode content type  
+4. Decrypt encrypted data  

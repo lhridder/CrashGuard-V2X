@@ -15,13 +15,12 @@ from hashlib import sha256
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
-from cryptography.hazmat.primitives.serialization import load_der_public_key, load_pem_private_key
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.kdf.concatkdf import ConcatKDFHash
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM
+from pyasn1.type import univ, char, namedtype, namedval
+from pyasn1.codec.der import encoder
 import time
-from pyasn1.type import univ, char, namedtype, tag, useful, namedval
-from pyasn1.codec.der import encoder, decoder
 import os
 
 # HeaderInfo (ASN.1)
