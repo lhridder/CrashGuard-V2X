@@ -68,10 +68,4 @@ signed_data = {
 }
 demoLog("SignedData", signed_data)
 
-# 6. ASN.1 encoding
-
-# 7. (Optioneel) encryption
-
-# 8. EncryptedData
-
-# 9. Ieee1609Dot2Data
+#...
