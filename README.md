@@ -22,6 +22,7 @@ creating C-ITS V2X communication using WAVE standard (IEEE 1609.2). Includes:
 7. (Optioneel) encryption  
 8. EncryptedData  
 9. Ieee1609Dot2Data  
+
 ![img1](encode_model.jpg)  
 
 # Python Demo - WAVE decoding  
