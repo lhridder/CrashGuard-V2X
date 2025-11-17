@@ -70,7 +70,7 @@ def decode_message() -> None:
         demoLog("EncryptedData - CCM Tag", ccm_tag.hex())
     
     # 4. Decrypt encrypted data
-    with open("IEEE python Chris/keys/receiver_private_key.pem", "rb") as f:     # get receiver private key
+    with open("keys/receiver_private_key.pem", "rb") as f:     # get receiver private key
         receiver_private_key = load_pem_private_key(f.read(), password=None)
         
     ephemeral_pub = load_der_public_key(eph_pub_bytes)

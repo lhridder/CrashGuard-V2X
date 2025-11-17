@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives import serialization
 def createKey() -> None:
     sender_private_key = ec.generate_private_key(ec.SECP256R1())   # maak private key ECDSA (p-256)
 
-    with open("IEEE python Chris/keys/sender_private_key.pem", "wb") as f:
+    with open("keys/sender_private_key.pem", "wb") as f:
         f.write(
             sender_private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,
@@ -21,7 +21,7 @@ def createKey() -> None:
 
     receiver_private_key = ec.generate_private_key(ec.SECP256R1())   # maak private key ECDSA (p-256)
 
-    with open("IEEE python Chris/keys/receiver_private_key.pem", "wb") as f:
+    with open("keys/receiver_private_key.pem", "wb") as f:
         f.write(
             receiver_private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,

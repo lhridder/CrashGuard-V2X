@@ -98,7 +98,7 @@ def encode_message() -> None:
     demoLog("Hashing", digest)
 
     # 3. Signing
-    with open("IEEE python Chris/keys/sender_private_key.pem", "rb") as f:   # get sender private key
+    with open("keys/sender_private_key.pem", "rb") as f:   # get sender private key
         sender_private_key = serialization.load_pem_private_key(f.read(), password=None)
 
     der_signature = sender_private_key.sign(   # sign payload met ECDSA en private key (niet digest!)
@@ -160,7 +160,7 @@ def encode_message() -> None:
 
     demoLog("Encryption: ephermeral key", ephemeral_public_key.public_bytes(encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo).hex())
 
-    with open("IEEE python Chris/keys/receiver_private_key.pem", "rb") as f:     # get receiver public key
+    with open("keys/receiver_private_key.pem", "rb") as f:     # get receiver public key
         receiver_private_key = serialization.load_pem_private_key(f.read(), password=None)
     receiver_public_key = receiver_private_key.public_key()
 
