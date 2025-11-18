@@ -1,11 +1,3 @@
-"""
-Apart script voor de reciever om te decoden. Stappen zijn:
-1. Ontvang bericht
-2. Decode Ieee1609Dot2Data
-3. Decode content type
-4. Decrypt encrypted data
-"""
-
 from pyasn1.codec.der import decoder
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.serialization import load_der_public_key, load_pem_private_key
@@ -21,9 +13,11 @@ def demoLog(step:str, output:str) -> None:
     print(f"\n[\033[36m{step}\033[0m]:\n{output}")
 
 def decode_message() -> None:
-    
-    os.system('cls')
 
+    # welke data is nodig?
+    with open("keys/receiver_private_key.pem", "rb") as f:
+        RECEIVER_PRIVATE_KEY = load_pem_private_key(f.read(), password=None)
+    
     # 1. bericht ontvangen (in dit geval txt)
     with open("IEEE python Chris/signed_msg.txt", "rb") as f:
         final_message = f.read()
@@ -69,12 +63,9 @@ def decode_message() -> None:
         demoLog("EncryptedData - Nonce", nonce.hex())
         demoLog("EncryptedData - CCM Tag", ccm_tag.hex())
     
-    # 4. Decrypt encrypted data
-    with open("keys/receiver_private_key.pem", "rb") as f:     # get receiver private key
-        receiver_private_key = load_pem_private_key(f.read(), password=None)
-        
+    # 4. Decrypt encrypted data        
     ephemeral_pub = load_der_public_key(eph_pub_bytes)
-    shared_secret = receiver_private_key.exchange(ec.ECDH(), ephemeral_pub)
+    shared_secret = RECEIVER_PRIVATE_KEY.exchange(ec.ECDH(), ephemeral_pub)
     ckdf = ConcatKDFHash(algorithm=hashes.SHA256(), length=16, otherinfo=None)
     aes_key = ckdf.derive(shared_secret)
     aesccm = AESCCM(aes_key, tag_length=16)
@@ -84,4 +75,5 @@ def decode_message() -> None:
     demoLog("Decrypted Payload", plaintext)
 
 if __name__ == "__main__":
+    os.system('cls')
     decode_message()
