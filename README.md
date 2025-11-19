@@ -1,6 +1,6 @@
 # TODO  
-- signedData en encrytedData combineren? anders signedData.  
-- werkt TTL en de andere parameters die het veilig maken?  
+- real pubkey.  
+- certificate validity check.  
 - geen fake certificate maar echte certificates maken.  
 
 # CrashGuard V2X  

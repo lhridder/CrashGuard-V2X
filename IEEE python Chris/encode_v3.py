@@ -30,7 +30,7 @@ def encode_message(contentType:int = 0) -> None:
     header = HeaderInfo()
     header.setComponentByName('psid', 0x20)
     header.setComponentByName('generationTime', GENERATION_TIME)
-    header.setComponentByName('expiryTime', GENERATION_TIME + 1_000_000)
+    header.setComponentByName('expiryTime', GENERATION_TIME + 10_000_000)
 
     demoLog("HeaderInfo", header)
 
@@ -44,8 +44,8 @@ def encode_message(contentType:int = 0) -> None:
     # --- SignedData ---
     if contentType in (1, 3):   # signedData of envelopedData
         signer = SignerInfo()
-        signer.setComponentByName('certID', 'pijlwagenCert01')
-        signer.setComponentByName('publicKey', b'placeholder_pubkey')
+        signer.setComponentByName('certID', 'pijlwagenCert01')          #TODO: real cert
+        signer.setComponentByName('publicKey', b'placeholder_pubkey')   #TODO: real pubkey
 
         signed_data = SignedData()
         signed_data.setComponentByName('tbsData', tbs)
@@ -75,7 +75,7 @@ def encode_message(contentType:int = 0) -> None:
 
         # EncryptedData ASN.1
         recipient = RecipientInfo()
-        recipient.setComponentByName('recipientID', 'group_01')
+        recipient.setComponentByName('recipientID', 'group_01')     #TODO: real group
         recipients_seq = univ.SequenceOf(componentType=RecipientInfo())
         recipients_seq.append(recipient)
 
@@ -100,7 +100,7 @@ def encode_message(contentType:int = 0) -> None:
 
         # EnvelopedData ASN.1
         recipient = RecipientInfo()
-        recipient.setComponentByName('recipientID', 'group_01')
+        recipient.setComponentByName('recipientID', 'group_01')     #TODO: real group
         recipients_seq = univ.SequenceOf(componentType=RecipientInfo())
         recipients_seq.append(recipient)
 

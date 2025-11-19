@@ -1,6 +1,7 @@
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM
 from pyasn1.codec.der import decoder
-from asn1 import RecipientInfo, EnvelopedData, Ieee1609Dot2Data, SignedData
+from asn1 import EnvelopedData, Ieee1609Dot2Data, SignedData
+import time
 import os
 
 def demoLog(step:str, output:str) -> None:
@@ -28,6 +29,20 @@ def decode_message() -> None:
     elif content_type == 1: # signedData
         signed_data, _ = decoder.decode(content_bytes, asn1Spec=SignedData())
         demoLog("SignedData", signed_data)
+        
+        # --- generation time verification ---
+        tbs = signed_data['tbsData']
+        header = tbs['headerInfo']
+        generation_time = int(header['generationTime'])
+        expiry_time = int(header['expiryTime'])
+
+        current_time = int(time.time() * 1_000_000)
+
+        if current_time < generation_time:
+            demoLog("GenerationTime Check", "Message is from the future!")
+        elif current_time > expiry_time:
+            demoLog("GenerationTime Check", "Message expired!")
+        
         # TODO: signature verification
 
     elif content_type == 2: # encryptedData
@@ -67,14 +82,26 @@ def decode_message() -> None:
         
         signed_data, _ = decoder.decode(signed_bytes, asn1Spec=SignedData())
         demoLog("SignedData", signed_data)
+
+        # --- generation time verification ---
+        tbs = signed_data['tbsData']
+        header = tbs['headerInfo']
+        generation_time = int(header['generationTime'])
+        expiry_time = int(header['expiryTime'])
+
+        current_time = int(time.time() * 1_000_000)
+
+        if current_time < generation_time:
+            demoLog("GenerationTime Check", "Message is from the future!")
+        elif current_time > expiry_time:
+            demoLog("GenerationTime Check", "Message expired!")
+        
         # TODO: signature verification
 
     else:
         raise ValueError("Unknown contentType")
 
-    # --- signature verification ---
-
-    # --- generation time verification ---
+    # --- #TODO: signature verification ---
 
 if __name__ == "__main__":
     os.system('cls')
