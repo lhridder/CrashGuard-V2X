@@ -1,1 +1,6 @@
+*.bin
 *.pem
+create_keys_v1.py
+decode_v1.py
+encode_v1.py
+encode_v2.py
