@@ -2,7 +2,6 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.kdf.concatkdf import ConcatKDFHash
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM
 from pyasn1.type import univ
 from pyasn1.codec.der import encoder
@@ -47,10 +46,26 @@ def encode_message(contentType:int = 0) -> None:
         signer.setComponentByName('certID', 'pijlwagenCert01')          #TODO: real cert
         signer.setComponentByName('publicKey', b'placeholder_pubkey')   #TODO: real pubkey
 
+        tbs_bytes = encoder.encode(tbs) # ASN.1 encoding
+
+        # signing
+        with open("keys/sender_private_key.pem", "rb") as f:
+            SENDER_PRIVATE_KEY = serialization.load_pem_private_key(f.read(), password=None)
+
+        # signature
+        signature = SENDER_PRIVATE_KEY.sign(
+            tbs_bytes,
+            ec.ECDSA(hashes.SHA256())
+        )
+
+        # DER -> raw r||s
+        r, s = decode_dss_signature(signature)
+        raw_signature = r.to_bytes(32, 'big') + s.to_bytes(32, 'big')
+
         signed_data = SignedData()
         signed_data.setComponentByName('tbsData', tbs)
         signed_data.setComponentByName('signerInfo', signer)
-        signed_data.setComponentByName('signatureValue', b'placeholder_signature')
+        signed_data.setComponentByName('signatureValue', raw_signature)
 
         demoLog("SignedData", signed_data)
 
@@ -59,6 +74,7 @@ def encode_message(contentType:int = 0) -> None:
         content_bytes = payload
 
     elif contentType == 1:  # signedData
+        
         content_bytes = encoder.encode(signed_data)
 
     elif contentType == 2:  # encryptedData
@@ -82,6 +98,7 @@ def encode_message(contentType:int = 0) -> None:
         enc_data = EncryptedData()
         enc_data.setComponentByName('recipients', recipients_seq)
         enc_data.setComponentByName('ciphertext', ciphertext)
+        enc_data.setComponentByName('nonce', NONCE)
         enc_data.setComponentByName('ccmTag', ccm_tag)
 
         content_bytes = encoder.encode(enc_data)    # ASN.1 encoding
